@@ -9,12 +9,18 @@ class App
 
   def start
     @view = View::Ruby2dView.new(self)
-    Thread.new { init_timer }
+    timer_thread = Thread.new { init_timer }
     @view.start(@state)
+    timer_thread.join
   end
 
   def init_timer
     loop do
+      if @state.game_finished
+        puts "Juego finalizado"
+        puts "Puntaje: #{@state.snake.positions.length}"
+        break
+      end
       @state = Actions::move_snake(@state)
       @view.render(@state)
       sleep 0.5
@@ -24,7 +30,7 @@ class App
   def send_action(action, params)
     # :change_direction, Model::Direction::UP
     new_state = Actions.send(action, @state, params)
-    if new_state.hash != @state
+    if new_state.hash != @state.hash
       @state = new_state
       @view.render(@state)
     end
