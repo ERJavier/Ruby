@@ -1,4 +1,4 @@
-equire_relative "view/ruby2d"
+require_relative "view/ruby2d"
 require_relative "model/state"
 require_relative "actions/actions"
 
@@ -38,4 +38,4 @@ class App
 end
 
 app = App.new
-app.star
+app.start
